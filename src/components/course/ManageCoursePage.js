@@ -1,5 +1,7 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import toastr from 'toastr';
 import * as courseActions from '../../actions/courseActions';
@@ -13,13 +15,14 @@ export class ManageCoursePage extends React.Component {
     this.state = {
       course: Object.assign({}, props.course),
       errors: {},
-      saving: false
+      saving: false,
+      redirect: false
     };
     this.updateCourseState = this.updateCourseState.bind(this);
     this.saveCourse = this.saveCourse.bind(this);
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.course.id !== nextProps.course.id) {
       this.setState({
         course: Object.assign({}, nextProps.course)
@@ -39,10 +42,9 @@ export class ManageCoursePage extends React.Component {
     return formIsValid;
   }
 
-  redirectToList () {
-    this.setState({saving: false});
+  redirectToList() {
+    this.setState({saving: false, redirect: true});
     toastr.success('Course Saved!');
-    this.context.router.push('/courses');
   }
 
   saveCourse(event) {
@@ -71,6 +73,9 @@ export class ManageCoursePage extends React.Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/courses"/>;
+    }
     return (
       <div>
         <h1>Manage Course</h1>
@@ -90,7 +95,8 @@ export class ManageCoursePage extends React.Component {
 ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   authors: PropTypes.array,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired
 };
 
 ManageCoursePage.contextTypes = {
@@ -98,7 +104,7 @@ ManageCoursePage.contextTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const courseId = ownProps.params.id;
+  const courseId = ownProps.match.params.id;
 
   let course = (courseId && state.courses.length > 0) ? state.courses.find(course => course.id === courseId) : {id: ''};
 

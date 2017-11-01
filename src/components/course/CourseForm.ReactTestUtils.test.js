@@ -1,6 +1,6 @@
 import expect from 'expect';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import {createRenderer} from 'react-test-renderer/shallow';
 import CourseForm from './CourseForm';
 
 function setup(loading) {
@@ -13,7 +13,7 @@ function setup(loading) {
     onChange: () => {}
   };
 
-  let renderer = TestUtils.createRenderer();
+  let renderer = createRenderer();
   renderer.render(<CourseForm {...props}/>);
   let output = renderer.getRenderOutput();
 

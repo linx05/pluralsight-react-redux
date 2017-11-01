@@ -17,7 +17,7 @@ describe('Course Reducer', () => {
     //assert
     expect(newState.length).toBe(3);
     expect(newState[0].title).toEqual(initialState[0].title);
-    expect(newState).toNotEqual(initialState);
+    expect(newState).not.toBe(initialState);
   });
 
   it('Should update course when passed UPDATE_COURSE_SUCCESS', () => {

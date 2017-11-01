@@ -7,8 +7,13 @@ describe('Manage Course Page', () => {
   it('sets error message when trying to save empty title', () => {
     const props = {
       authors: [],
-      actions: { saveCourse: () => { return Promise.resolve(); }},
-      course: {id: '', watchHref: '', title: '', authorId: '', length: '', category: ''}
+      actions: {
+        saveCourse: () => {
+          return Promise.resolve();
+        }
+      },
+      course: {id: '', watchHref: '', title: '', authorId: '', length: '', category: ''},
+      match: {}
     };
     const wrapper = mount(<ManageCoursePage {...props} />);
     const saveButton = wrapper.find('input').last();

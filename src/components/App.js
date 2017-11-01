@@ -1,21 +1,31 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Route} from 'react-router-dom';
 import Header from './common/Header';
+import HomePage from './home/HomePage';
+import CoursesPage from './course/CoursesPage';
+import ManageCoursePage from './course/ManageCoursePage'; //eslint-disable-line import/no-named-as-default
+import AboutPage from './about/AboutPage';
 import {connect} from 'react-redux';
 
 class App extends React.Component {
-  render () {
+  render() {
     return (
       <div className="container-fluid">
-        <Header loading={this.props.loading} />
-        {this.props.children}
+        <Header loading={this.props.loading}/>
+        <Route exact path="/" component={HomePage}/>
+        <Route path="/courses" component={CoursesPage}/>
+        <Route path="/course/:id" component={ManageCoursePage}/>
+        <Route path="/course" component={ManageCoursePage} exact/>
+        <Route path="/about" component={AboutPage}/>
       </div>
     );
   }
 }
 
 App.propTypes = {
-  children: PropTypes.object.isRequired,
-  loading: PropTypes.bool
+  loading: PropTypes.bool.isRequired,
+  match: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

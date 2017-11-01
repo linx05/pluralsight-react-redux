@@ -59,7 +59,7 @@ describe('Store Integration', () => {
     const updatedResult = resultUpdate.find(course => course.id === updatedCourse.id);
     //assert course update
     expect(resultUpdate.length).toEqual(2);
-    expect(updatedResult).toExist();
+    expect(updatedResult).toBeTruthy();
     expect(updatedResult.title).toEqual(updatedCourse.title);
   });
 });
