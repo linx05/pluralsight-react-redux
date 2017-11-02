@@ -14,6 +14,24 @@ export function loadCoursesSuccess (courses) {
   return { type: types.LOAD_COURSES_SUCCESS, courses };
 }
 
+export function deleteCourseSuccess (id) {
+  return {type: types.DELETE_COURSE_SUCCESS, id };
+}
+
+export function deleteCourse(id) {
+  return function (dispatch) {
+    dispatch(beginAjaxCall());
+    return courseApi.deleteCourse(id)
+      .then(res => {
+        dispatch(deleteCourseSuccess(id));
+      })
+      .catch(err => {
+        dispatch(ajaxCallError());
+        throw(err);
+      });
+  };
+}
+
 export function loadCourses () {
   return function (dispatch) {
     dispatch(beginAjaxCall());

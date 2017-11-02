@@ -3,18 +3,27 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import toastr from 'toastr';
 import * as courseActions from '../../actions/courseActions';
 import CourseList from './CourseList';
 
-class CoursesPage extends React.Component {
+export class CoursesPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.redirectToAddCoursePage = this.redirectToAddCoursePage.bind(this);
+    this.deleteCourse = this.deleteCourse.bind(this);
   }
 
   redirectToAddCoursePage() {
     this.props.history.push('/course');
+  }
+
+  deleteCourse (id) {
+    this.props.actions.deleteCourse(id)
+      .then(res => {
+        toastr.error('Course Deleted!');
+      });
   }
 
   render() {
@@ -26,7 +35,7 @@ class CoursesPage extends React.Component {
                className="btn btn-primary"
                onClick={this.redirectToAddCoursePage}/>
 
-        <CourseList courses={this.props.courses}/>
+        <CourseList courses={this.props.courses} deleteCourse={this.deleteCourse}/>
       </div>
     );
   }

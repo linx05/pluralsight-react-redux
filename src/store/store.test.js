@@ -62,4 +62,21 @@ describe('Store Integration', () => {
     expect(updatedResult).toBeTruthy();
     expect(updatedResult.title).toEqual(updatedCourse.title);
   });
+
+  it('Should handle deleting a course', () => {
+    const initialCourses = [
+      {id: 'a', title: 'ABC'},
+      {id: 'b', title: 'DEF'},
+      {id: 'c', title: 'HIJ'}
+    ];
+    const store = createStore(rootReducer, Object.assign({}, initialState,{courses: initialCourses}));
+
+    //action
+    const action = CourseActions.deleteCourseSuccess(initialCourses[0].id);
+    store.dispatch(action);
+
+    //assert
+    const actual = store.getState().courses;
+    expect(actual.length).toEqual(2);
+  });
 });
