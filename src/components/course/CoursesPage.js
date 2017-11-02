@@ -13,10 +13,20 @@ export class CoursesPage extends React.Component {
 
     this.redirectToAddCoursePage = this.redirectToAddCoursePage.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
+    this.changeCourseOrder = this.changeCourseOrder.bind(this);
+    this.state = {
+      order: 'title'
+    };
   }
 
   redirectToAddCoursePage() {
     this.props.history.push('/course');
+  }
+
+  changeCourseOrder (field) {
+    this.setState({
+      order: field
+    });
   }
 
   deleteCourse (id) {
@@ -30,12 +40,23 @@ export class CoursesPage extends React.Component {
     return (
       <div>
         <h1>Courses</h1>
-        <input type="submit"
-               value="Add Course"
-               className="btn btn-primary"
-               onClick={this.redirectToAddCoursePage}/>
+        <div className="row">
+          <div className="col-sm-12 col-md-6">
+            <input type="submit"
+                   value="Add Course"
+                   className="btn btn-primary"
+                   onClick={this.redirectToAddCoursePage}/>
+          </div>
+          <div className="col-sm-12 col-md-6">
+            {this.props.courses.length > 0 && <h2 className="text-right">Registered Courses: {this.props.courses.length}</h2>}
+          </div>
+        </div>
 
-        <CourseList courses={this.props.courses} deleteCourse={this.deleteCourse}/>
+        {this.props.courses.length > 0 ? <CourseList courses={sortByField(this.props.courses, this.state.order)} deleteCourse={this.deleteCourse} changeOrder={this.changeCourseOrder}/>
+          : (!this.props.busy && <div>
+            <h1 className="center-block">You seem to not have any courses, create one!</h1>
+          </div>)
+        }
       </div>
     );
   }
@@ -44,12 +65,30 @@ export class CoursesPage extends React.Component {
 CoursesPage.propTypes = {
   actions: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  busy: PropTypes.bool
 };
+
+function sortByField (list,field = 'title') {
+  return list.sort((a, b) => {
+    const nameA = a[field].toUpperCase(); // ignore upper and lowercase
+    const nameB = b[field].toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+
+    // names must be equal
+    return 0;
+  });
+}
 
 function mapStateToProps(state, ownProps) {
   return {
-    courses: state.courses
+    courses: state.courses,
+    busy: state.ajaxCallsInProgress > 0
   };
 }
 
