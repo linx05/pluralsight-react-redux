@@ -3,16 +3,21 @@ import PropTypes from 'prop-types';
 import CourseListRow from './CourseListRow';
 
 const CourseList = ({courses, deleteCourse, changeOrder}) => {
+
+  const clickOnHeader = (field) => {
+    return () => changeOrder(field);
+  };
+
   return (
     <table className="table">
       <thead>
         <tr>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th className="clickable" onClick={() => changeOrder('title')}>Title</th>
-          <th className="clickable" onClick={() => changeOrder('authorId')}>Author</th>
-          <th className="clickable" onClick={() => changeOrder('category')}>Category</th>
-          <th className="clickable" onClick={() => changeOrder('length')}>Length</th>
+          <th className="clickable" onClick={clickOnHeader('title')}>Title</th>
+          <th className="clickable" onClick={clickOnHeader('authorId')}>Author</th>
+          <th className="clickable" onClick={clickOnHeader('category')}>Category</th>
+          <th className="clickable" onClick={clickOnHeader('length')}>Length</th>
         </tr>
       </thead>
       <tbody>
